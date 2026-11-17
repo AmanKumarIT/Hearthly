@@ -6,7 +6,7 @@ import { IMAGES } from './images.js'
 import { AREAS, LISTINGS, TEAM, TYPES, MOVES, COSTS, FAQ, PHONE, WHATSAPP, CITY } from './data.js'
 
 /* ---------- Header ---------- */
-const LINKS = [['properties', 'Properties', 'प्रॉपर्टी'], ['help', 'How we help', 'हम कैसे मदद करते हैं'], ['process', 'How it works', 'कैसे काम करता है'], ['calculator', 'Calculator', 'कैलकुलेटर'], ['team', 'Our people', 'हमारी टीम'], ['resources', 'Resources', 'संसाधन']]
+const LINKS = [['home','Home','होम'],['properties', 'Properties', 'प्रॉपर्टी'], ['help', 'How we help', 'हम कैसे मदद करते हैं'], ['process', 'How it works', 'कैसे काम करता है'], ['calculator', 'Calculator', 'कैलकुलेटर'], ['team', 'Our people', 'हमारी टीम'], ['resources', 'Resources', 'संसाधन']]
 
 export function Header() {
   const { t, lang, setLang, themePref, setTheme, go } = useApp()
@@ -37,41 +37,9 @@ export function Header() {
       <div className="wrap">
         <Link to="/" aria-label="FutureNova home"><Logo /></Link>
         <nav className="nav" aria-label="Main">
-          {LINKS.map(([id, en, hi]) => <NavLink key={id} to={ROUTES[id]} className={({ isActive }) => (isActive ? 'on' : '')}>{t(en, hi)}</NavLink>)}
+          {LINKS.map(([id, en, hi]) => <NavLink key={id} to={ROUTES[id]} end className={({ isActive }) => (isActive ? 'on' : '')}>{t(en, hi)}</NavLink>)}
         </nav>
-        {/* <div className="tools">
-          <div className="lang hide-m" role="group" aria-label="Language">
-            <button className={lang === 'en' ? 'on' : ''} aria-pressed={lang === 'en'} onClick={() => setLang('en')}>EN</button>
-            <button className={lang === 'hi' ? 'on' : ''} aria-pressed={lang === 'hi'} onClick={() => setLang('hi')} lang="hi">हिन्दी</button>
-          </div>
-          <div className="rel hide-m">
-            <button className="icon-btn" aria-label={`Theme: ${themePref}`} aria-haspopup="true" aria-expanded={pop === 'theme'} onClick={() => setPop(pop === 'theme' ? null : 'theme')}>
-              <span className="morph"><Ic n="sun" className="sun" /><Ic n="moon" className="moon" /></span>
-            </button>
-            <button className="icon-btn dots-btn" aria-label="Open menu" aria-expanded={drawer} aria-controls="mobile-menu" onClick={() => setDrawer(true)}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2" /><circle cx="12" cy="12" r="2" /><circle cx="12" cy="19" r="2" /></svg>
-          </button>
-            {pop === 'theme' && <div className="pop sm" role="menu">{['light', 'dark', 'system'].map((m) => <button key={m} aria-pressed={themePref === m} onClick={() => { setTheme(m); setPop(null) }}>{m === 'light' ? t('Light', 'लाइट') : m === 'dark' ? t('Dark', 'डार्क') : t('System', 'सिस्टम')}</button>)}</div>}
-          </div>
-          <div className="rel">
-            <button ref={chatBtn} className="icon-btn" aria-label="Chat" aria-expanded={pop === 'chat'} onClick={() => setPop(pop === 'chat' ? null : 'chat')}>
-              <Ic n="chat" /><i className="dotg" />
-            </button>
-            {pop === 'chat' && (
-              <div className="pop" role="dialog" aria-label="Chat">
-                <h3 style={{ fontSize: '1.2rem', marginBottom: 6 }}>{t('Hi there 👋', 'नमस्ते 👋')}</h3>
-                <p className="serif" style={{ fontSize: '1rem', marginBottom: 16 }}>{t('We’re online. Ask us anything about homes or loans.', 'हम ऑनलाइन हैं। घर या लोन के बारे में कुछ भी पूछिए।')}</p>
-                <div style={{ display: 'grid', gap: 10 }}>
-                  <Btn tone="teal" autoFocus onClick={() => setPop(null)}>{t('Start chat', 'चैट शुरू करें')}</Btn>
-                  <Btn tone="yellow" href={WHATSAPP} target="_blank" rel="noreferrer">{t('Continue on WhatsApp', 'WhatsApp पर जारी रखें')}</Btn>
-                </div>
-                <p className="note" style={{ marginTop: 10 }}>Placeholder chat. Connect your provider here.</p>
-              </div>
-            )}
-          </div>
-          <Btn tone="teal" href="/contact" onClick={nav('contact')}>{t('Let’s talk', 'बात करें')}</Btn>
-          <button className="icon-btn menu-btn" aria-label="Menu" aria-expanded={menu} onClick={() => setMenu(!menu)}><Ic n={menu ? 'close' : 'menu'} /></button>
-        </div> */}
+ 
                 <div className="tools">
           <div className="lang hide-m" role="group" aria-label="Language">
             <button className={lang === 'en' ? 'on' : ''} aria-pressed={lang === 'en'} onClick={() => setLang('en')}>EN</button>
@@ -105,6 +73,7 @@ export function Header() {
             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2" /><circle cx="12" cy="12" r="2" /><circle cx="12" cy="19" r="2" /></svg>
           </button>
         </div>
+
       </div>
             <div className={`drawer ${drawer ? 'open' : ''}`}>
         <div className="drawer-back" onClick={() => setDrawer(false)} />

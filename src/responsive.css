@@ -85,3 +85,7 @@ html.drawer-open .sphere{display:none}
 @media(max-width:1279px){
   .nav+.tools{margin-left:auto}
 }
+
+@media(min-width:1280px) and (max-width:1439px){
+  .nav{gap:18px;font-size:.9rem}
+}
