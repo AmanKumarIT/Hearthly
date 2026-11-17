@@ -117,24 +117,9 @@ export function useParallax() {
   return r
 }
 
-// Illustrative scene used instead of photography
-export function Art({ i = 0 }) {
-  const h = [170, 35, 150, 25, 190, 45][i % 6]
-  return (
-    <svg className="art" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Illustrative home scene">
-      <rect width="400" height="300" fill={`hsl(${h} 50% 88%)`} />
-      <circle cx={330 - i * 14} cy="70" r="28" fill="#FFC857" />
-      <rect y="238" width="400" height="62" fill={`hsl(${h} 30% 40%)`} opacity=".25" />
-      <rect x="60" y="130" width="150" height="110" rx="4" fill={`hsl(${(h + 20) % 360} 40% 38%)`} />
-      <path d="M48 136 135 78l87 58z" fill={`hsl(${h} 35% 26%)`} />
-      <rect x="120" y="180" width="30" height="60" rx="3" fill="#FFC857" />
-      <rect x="75" y="155" width="28" height="28" fill="#fff" opacity=".85" />
-      <rect x="170" y="155" width="28" height="28" fill="#fff" opacity=".85" />
-      <rect x="245" y="160" width="100" height="80" rx="4" fill={`hsl(${h} 30% 55%)`} />
-      <rect x="262" y="180" width="22" height="22" fill="#fff" opacity=".8" />
-      <rect x="302" y="180" width="22" height="22" fill="#fff" opacity=".8" />
-    </svg>
-  )
+// Picture used on cards. The address comes from images.js
+export function Art({ src, alt = 'Illustrative home scene' }) {
+  return <img className="art" src={src} alt={alt} loading="lazy" />
 }
 
 export const Logo = ({ light }) => (

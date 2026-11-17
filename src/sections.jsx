@@ -1,5 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { Link, NavLink } from 'react-router-dom'
+import { ROUTES } from './routes.js'
 import { useApp, Ic, Btn, Reveal, Art, Logo, inr, short, useCountUp, useInView, useParallax } from './ui.jsx'
+import { IMAGES } from './images.js'
 import { AREAS, LISTINGS, TEAM, TYPES, MOVES, COSTS, FAQ, PHONE, WHATSAPP, CITY } from './data.js'
 
 /* ---------- Header ---------- */
@@ -10,16 +13,10 @@ export function Header() {
   const [small, setSmall] = useState(false)
   const [menu, setMenu] = useState(false)
   const [pop, setPop] = useState(null) // 'theme' | 'chat'
-  const [active, setActive] = useState('')
   const chatBtn = useRef(null)
   useEffect(() => {
     const f = () => setSmall(scrollY > 40)
     f(); addEventListener('scroll', f, { passive: true }); return () => removeEventListener('scroll', f)
-  }, [])
-  useEffect(() => {
-    const io = new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting && setActive(e.target.id)), { rootMargin: '-40% 0px -55% 0px' })
-    LINKS.forEach(([id]) => { const el = document.getElementById(id); el && io.observe(el) })
-    return () => io.disconnect()
   }, [])
   useEffect(() => {
     const k = (e) => { if (e.key === 'Escape') { setPop(null); setMenu(false); chatBtn.current && pop === 'chat' && chatBtn.current.focus() } }
@@ -29,9 +26,9 @@ export function Header() {
   return (
     <header className={`hdr ${small ? 'small' : ''}`}>
       <div className="wrap">
-        <a href="#top" aria-label="Hearthly home"><Logo /></a>
+        <Link to="/" aria-label="Hearthly home"><Logo /></Link>
         <nav className="nav" aria-label="Main">
-          {LINKS.map(([id, en, hi]) => <a key={id} href={'#' + id} className={active === id ? 'on' : ''} onClick={nav(id)}>{t(en, hi)}</a>)}
+          {LINKS.map(([id, en, hi]) => <NavLink key={id} to={ROUTES[id]} className={({ isActive }) => (isActive ? 'on' : '')}>{t(en, hi)}</NavLink>)}
         </nav>
         <div className="tools">
           <div className="lang" role="group" aria-label="Language">
@@ -60,33 +57,18 @@ export function Header() {
               </div>
             )}
           </div>
-          <Btn tone="teal" href="#contact" onClick={nav('contact')}>{t('Let’s talk', 'बात करें')}</Btn>
+          <Btn tone="teal" href="/contact" onClick={nav('contact')}>{t('Let’s talk', 'बात करें')}</Btn>
           <button className="icon-btn menu-btn" aria-label="Menu" aria-expanded={menu} onClick={() => setMenu(!menu)}><Ic n={menu ? 'close' : 'menu'} /></button>
         </div>
       </div>
-      {menu && <nav className="mnav" aria-label="Mobile">{LINKS.map(([id, en, hi]) => <a key={id} href={'#' + id} onClick={nav(id)}>{t(en, hi)}</a>)}</nav>}
+      {menu && <nav className="mnav" aria-label="Mobile">{LINKS.map(([id, en, hi]) => <NavLink key={id} to={ROUTES[id]} className={({ isActive }) => (isActive ? 'on' : '')} onClick={() => setMenu(false)}>{t(en, hi)}</NavLink>)}</nav>}
     </header>
   )
 }
 
 /* ---------- Hero ---------- */
 function HeroArt() {
-  return (
-    <svg className="hero-art" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Illustration of a couple holding keys outside a brick home">
-      <defs>
-        <pattern id="brick" width="80" height="36" patternUnits="userSpaceOnUse"><rect width="80" height="36" fill="#a8502f" /><rect x="2" y="2" width="36" height="14" fill="#b95f3a" /><rect x="42" y="2" width="36" height="14" fill="#b05735" /><rect x="-18" y="20" width="36" height="14" fill="#b05735" /><rect x="22" y="20" width="36" height="14" fill="#bd6440" /><rect x="62" y="20" width="36" height="14" fill="#b05735" /></pattern>
-      </defs>
-      <rect width="1600" height="900" fill="url(#brick)" />
-      <rect x="1060" y="0" width="540" height="900" fill="#2a2a2e" opacity=".0" />
-      <rect x="1130" y="120" width="320" height="560" rx="6" fill="#1d1f24" /><rect x="1130" y="120" width="320" height="560" rx="6" fill="none" stroke="#e9e4da" strokeWidth="14" />
-      <rect x="120" y="260" width="200" height="320" fill="#e9e4da" opacity=".85" /><rect x="140" y="280" width="160" height="280" fill="#2b3a3f" />
-      <rect x="560" y="260" width="200" height="320" fill="#e9e4da" opacity=".85" /><rect x="580" y="280" width="160" height="280" fill="#2b3a3f" />
-      <rect y="760" width="1600" height="140" fill="#3a3a3a" />
-      <g transform="translate(900 330)"><circle cx="90" cy="60" r="62" fill="#c98f6b" /><path d="M20 70q10-90 90-80 60 8 60 70-20-40-70-30-50 8-80 40z" fill="#4a2f22" /><path d="M-20 570 0 220q10-60 100-60t100 60l20 350z" fill="#e6dccb" /></g>
-      <g transform="translate(1080 300)"><circle cx="90" cy="70" r="66" fill="#d6a07b" /><path d="M24 60q20-80 90-70 60 8 62 60-30-30-70-24-50 6-82 34z" fill="#2b1d17" /><path d="M-10 600 10 230q10-60 100-60t110 60l20 370z" fill="#6c6f4a" /></g>
-      <circle cx="1020" cy="600" r="22" fill="#FFC857" stroke="#888" strokeWidth="6" />
-    </svg>
-  )
+  return <img className="hero-art" src={IMAGES.hero} alt="Illustration of a couple holding keys outside a brick home" />
 }
 
 export function Hero() {
@@ -104,13 +86,13 @@ export function Hero() {
         </h1>
         <p className="serif">{t('From your first set of keys to your next investment. Friendly, independent advice. Minus the jargon.', 'पहली चाबी से अगले निवेश तक। दोस्ताना, स्वतंत्र सलाह। बिना मुश्किल शब्दों के।')}</p>
         <div className="cta-row">
-          <Btn href="#contact" onClick={(e) => { e.preventDefault(); go('contact') }}>{t('Book a free appointment', 'मुफ़्त अपॉइंटमेंट बुक करें')}</Btn>
-          <Btn tone="link w" href="#calculator" onClick={(e) => { e.preventDefault(); go('calculator') }}>{t('Try our calculator', 'कैलकुलेटर आज़माएँ')}</Btn>
+          <Btn href="/contact" onClick={(e) => { e.preventDefault(); go('contact') }}>{t('Book a free appointment', 'मुफ़्त अपॉइंटमेंट बुक करें')}</Btn>
+          <Btn tone="link w" href="/calculator" onClick={(e) => { e.preventDefault(); go('calculator') }}>{t('Try our calculator', 'कैलकुलेटर आज़माएँ')}</Btn>
         </div>
       </div>
       <p className="hero-note"><Ic n="check" s={16} />{t('No pressure. No obligation. Just a good chat.', 'कोई दबाव नहीं। कोई बाध्यता नहीं। बस एक अच्छी बातचीत।')}</p>
       <div className="sticker"><Ic n="key" s={30} className="wig" /><span>{t('A little advice.', 'थोड़ी सलाह।')}<br />{t('A big new beginning.', 'एक बड़ी नई शुरुआत।')}</span></div>
-      <a className="scroll-dn" href="#help" aria-label="Scroll down" onClick={(e) => { e.preventDefault(); go('help') }}><Ic n="down" s={20} /></a>
+      <a className="scroll-dn" href="#trust" aria-label="Scroll down" onClick={(e) => { e.preventDefault(); document.getElementById('trust')?.scrollIntoView({ behavior: 'smooth' }) }}><Ic n="down" s={20} /></a>
     </section>
   )
 }
@@ -118,7 +100,7 @@ export function Hero() {
 export function Trust() {
   const { t } = useApp()
   return (
-    <div className="trust"><div className="wrap">
+    <div className="trust" id="trust"><div className="wrap">
       <span><Ic n="search" /><b>{t('Many lenders.', 'कई बैंक।')}</b> {t('One right fit for you.', 'आपके लिए एक सही विकल्प।')}</span>
       <span><Ic n="check" />{t('Independent advice. Always personal.', 'स्वतंत्र सलाह। हमेशा व्यक्तिगत।')}</span>
       <span><Ic n="pin" />{t(`Here in ${CITY}. Here for you.`, `यहीं ${CITY} में। आपके लिए।`)}</span>
@@ -215,7 +197,7 @@ export function Properties() {
             {list.slice(0, shown).map((l, i) => (
               <Reveal key={l.id} delay={(i % 3) * 80}>
                 <article className="prop" tabIndex={0} role="link" onClick={() => enquire(l)} onKeyDown={(e) => e.key === 'Enter' && enquire(l)} aria-label={`${l.title}, ${areaName(l.area)}`}>
-                  <div className="pic"><Art i={i + (l.intent === 'rent' ? 3 : 0)} />{l.tag && <span className="tagp">{l.tag}</span>}<span className="flag">Sample listing</span>
+                  <div className="pic"><Art src={IMAGES.listings[l.id]} alt={l.title} />{l.tag && <span className="tagp">{l.tag}</span>}<span className="flag">Sample listing</span>
                     <button className="save" aria-pressed={!!saved[l.id]} aria-label="Save home" onClick={(e) => { e.stopPropagation(); setSaved((s) => ({ ...s, [l.id]: !s[l.id] })) }}><Ic n="heart" /></button></div>
                   <div className="pbody">
                     <div className="price">{short(l.price)}{l.intent === 'rent' && <small> {t('/ month', '/ माह')}</small>}</div>
@@ -350,7 +332,7 @@ export function Neighbourhoods() {
         <div className="nbs">
           {AREAS.map((a, i) => (
             <Reveal key={a.id} delay={(i % 3) * 80}>
-              <article className="nb"><div className="pic" style={{ aspectRatio: '16/9' }}><Art i={i + 1} /><span className="flag">Sample data</span></div>
+              <article className="nb"><div className="pic" style={{ aspectRatio: '16/9' }}><Art src={IMAGES.areas[a.id]} alt={a.name} /><span className="flag">Sample data</span></div>
                 <div className="pbody"><h3>{a.name}</h3><p className="price" style={{ fontSize: '1.1rem' }}>{a.range}</p><p className="serif" style={{ fontSize: '1rem' }}>{t(...a.sum)}</p>
                   <div className="facts">{a.facts.map((x, k) => <span key={x}><Ic n={ic[k]} s={16} />{x}</span>)}</div>
                   <Btn tone="link" onClick={() => { setFilters((f) => ({ ...f, area: a.id })); go('properties') }}>{t(`See homes in ${a.name}`, `${a.name} में घर देखें`)}</Btn></div></article>
@@ -376,7 +358,7 @@ export function Team() {
             <Reveal key={m.name} delay={i * 100}>
               <div className="tcard">
                 <button className="tp" onClick={() => { setCtx((c) => ({ ...c, adviser: m.name })); go('contact') }} aria-label={`A good chat starts here with ${m.name}`}>
-                  <svg className="av" viewBox="0 0 400 500" aria-hidden="true"><rect width="400" height="500" fill={`hsl(${m.hue} 30% 88%)`} /><circle cx="200" cy="190" r="74" fill={`hsl(${m.hue} 35% 38%)`} /><path d="M60 500q10-170 140-170t140 170z" fill={`hsl(${m.hue} 45% 32%)`} /></svg>
+                  <img className="av" src={IMAGES.team[i]} alt="" />
                   <span className="bar">{t('A good chat starts here', 'अच्छी बातचीत यहाँ से शुरू')} <Ic n="arrow" s={16} /></span>
                 </button>
                 <h3>{m.name}</h3><p className="role">{t(...m.role)}</p><p className="serif" style={{ fontSize: '1.02rem' }}>{t(...m.bio)}</p>
@@ -414,7 +396,7 @@ export function Reviews() {
           {stories.map((s, i) => (
             <Reveal key={s[0]} delay={i * 100}>
               <button className="story" onClick={() => setOpen(s)}>
-                <div className="pic"><Art i={i + 2} /><span className="play"><Ic n="play" fill s={26} /></span><span className="flag">Placeholder story</span></div>
+                <div className="pic"><Art src={IMAGES.stories[i]} alt={s[0]} /><span className="play"><Ic n="play" fill s={26} /></span><span className="flag">Placeholder story</span></div>
                 <div className="pbody"><p className="cat">{s[1]}</p><h3 style={{ fontSize: '1.15rem', margin: '6px 0' }}>{s[0]}</h3><p className="serif" style={{ fontSize: '1rem' }}>{s[2]}</p></div>
               </button>
             </Reveal>
@@ -435,7 +417,7 @@ export function Resources() {
     <section id="resources">
       <div className="wrap">
         <div className="sec-head"><div><p className="eyebrow">{t('Straight-talking advice', 'सीधी-सादी सलाह')}</p><h2>{t('Little reads', 'छोटे लेख')}<br />{t('for big decisions.', 'बड़े फ़ैसलों के लिए।')}</h2></div><Btn tone="link">{t('See all resources', 'सभी संसाधन देखें')}</Btn></div>
-        <div className="grid3">{items.map((a, i) => <Reveal key={a[1]} delay={i * 100}><article className="res" tabIndex={0}><div className="pic"><Art i={i + 4} /><span className="flag">Placeholder article</span></div><div className="pbody"><p className="cat">{a[0]} · {a[3]}</p><h3 style={{ fontSize: '1.25rem', margin: '8px 0' }}>{a[1]}</h3><p className="serif" style={{ fontSize: '1rem' }}>{a[2]}</p></div></article></Reveal>)}</div>
+        <div className="grid3">{items.map((a, i) => <Reveal key={a[1]} delay={i * 100}><article className="res" tabIndex={0}><div className="pic"><Art src={IMAGES.resources[i]} alt={a[1]} /><span className="flag">Placeholder article</span></div><div className="pbody"><p className="cat">{a[0]} · {a[3]}</p><h3 style={{ fontSize: '1.25rem', margin: '8px 0' }}>{a[1]}</h3><p className="serif" style={{ fontSize: '1rem' }}>{a[2]}</p></div></article></Reveal>)}</div>
       </div>
     </section>
   )
@@ -532,7 +514,7 @@ export function Footer() {
       <div className="wrap">
         <div className="fgrid">
           <div><Logo /><p className="serif" style={{ margin: '20px 0 12px' }}>{t('Good advice. A place to call yours.', 'अच्छी सलाह। एक जगह जिसे आप अपना कह सकें।')}</p><p className="note" style={{ display: 'flex', gap: 8 }}><Ic n="pin" s={16} />{CITY} {t('roots. Advice across India.', 'की जड़ें। पूरे भारत में सलाह।')}</p></div>
-          <nav aria-label="Footer">{L.map(([id, e, h]) => <a key={id} href={'#' + id} onClick={(ev) => { ev.preventDefault(); go(id) }}>{t(e, h)}</a>)}</nav>
+          <nav aria-label="Footer">{L.map(([id, e, h]) => <a key={id} href={ROUTES[id]} onClick={(ev) => { ev.preventDefault(); go(id) }}>{t(e, h)}</a>)}</nav>
           <div><p className="serif" style={{ fontSize: '1.5rem', color: 'var(--text)', marginBottom: 18 }}>{t('Every next chapter starts with a conversation.', 'हर नया अध्याय एक बातचीत से शुरू होता है।')}</p><Btn tone="link" onClick={() => go('contact')}>{t('Book your free appointment', 'अपनी मुफ़्त अपॉइंटमेंट बुक करें')}</Btn></div>
         </div>
         <div className="risk"><b>{t('Your home may be repossessed if you do not keep up repayments on your loan.', 'यदि आप लोन की किस्तें नहीं चुकाते हैं तो आपका घर ज़ब्त किया जा सकता है।')}</b>
@@ -541,7 +523,7 @@ export function Footer() {
           <span style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap' }}>
             <span className="lang"><button className={lang === 'en' ? 'on' : ''} onClick={() => setLang('en')}>EN</button><button className={lang === 'hi' ? 'on' : ''} onClick={() => setLang('hi')}>हिन्दी</button></span>
             <span className="lang">{['light', 'dark', 'system'].map((m) => <button key={m} className={themePref === m ? 'on' : ''} aria-pressed={themePref === m} onClick={() => setTheme(m)}>{m}</button>)}</span>
-            <a href="#privacy" id="privacy">{t('Privacy & your data', 'गोपनीयता और आपका डेटा')}</a><a href="#contact" onClick={(ev) => { ev.preventDefault(); go('contact') }}>{t('Get in touch', 'संपर्क करें')}</a></span></div>
+            <a href="#privacy" id="privacy">{t('Privacy & your data', 'गोपनीयता और आपका डेटा')}</a><a href="/contact" onClick={(ev) => { ev.preventDefault(); go('contact') }}>{t('Get in touch', 'संपर्क करें')}</a></span></div>
       </div>
     </footer>
   )

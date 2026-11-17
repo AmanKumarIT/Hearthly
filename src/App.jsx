@@ -1,6 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
+import { ROUTES } from './routes.js'
+import { HomePage, PropertiesPage, HowWeHelpPage, HowItWorksPage, CalculatorPage, OurPeoplePage, ResourcesPage, ContactPage } from './pages.jsx'
 import { AppCtx } from './ui.jsx'
-import { Header, Hero, Trust, Audience, Properties, Process, Calculator, Neighbourhoods, Team, Reviews, Resources, Faq, Contact, Footer, Sphere } from './sections.jsx'
+import { Header, Footer, Sphere } from './sections.jsx'
 
 const read = (k, d) => { try { return localStorage.getItem(k) || d } catch { return d } }
 const urlFilters = () => {
@@ -14,12 +17,14 @@ export default function App() {
   const [filters, setFilters] = useState(urlFilters)
   const [ctx, setCtx] = useState({})
   const main = useRef(null)
+  const navigate = useNavigate()
+  const { pathname } = useLocation()
+  const firstPath = useRef(pathname)
+  const moved = useRef(false) // true once the visitor has switched page (no curtain on first load)
+  if (pathname !== firstPath.current) moved.current = true
 
   const t = useCallback((en, hi) => (lang === 'hi' && hi ? hi : en), [lang])
-  const go = useCallback((id) => {
-    const el = document.getElementById(id)
-    el && el.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
-  }, [])
+  const go = useCallback((id) => navigate(ROUTES[id] || '/'), [navigate]) // opens the page for that section
   const setLang = (l) => {
     setLangS(l)
     try { localStorage.setItem('hl-lang', l) } catch {}
@@ -39,7 +44,9 @@ export default function App() {
     const apply = () => { document.documentElement.dataset.theme = themePref === 'dark' || (themePref === 'system' && mq.matches) ? 'dark' : 'light' }
     apply(); mq.addEventListener('change', apply); return () => mq.removeEventListener('change', apply)
   }, [themePref])
-  useEffect(() => { // filter state lives in the URL so searches can be shared
+  useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }) }, [pathname]) // each page opens at the top
+  useEffect(() => { // filter state lives in the URL (on the Properties page) so searches can be shared
+    if (pathname !== ROUTES.properties) return
     const p = new URLSearchParams()
     if (filters.intent !== 'buy') p.set('intent', filters.intent)
     if (filters.area) p.set('area', filters.area)
@@ -49,14 +56,27 @@ export default function App() {
     if (filters.types.length) p.set('types', filters.types.join(','))
     if (filters.sort !== 'new') p.set('sort', filters.sort)
     const q = p.toString()
-    history.replaceState(null, '', q ? `?${q}${location.hash}` : location.pathname + location.hash)
-  }, [filters])
+    history.replaceState(history.state, '', q ? `?${q}${location.hash}` : location.pathname + location.hash)
+  }, [filters, pathname])
 
   return (
     <AppCtx.Provider value={{ t, lang, setLang, themePref, setTheme, go, filters, setFilters, ctx, setCtx }}>
       <Header />
+      {moved.current && <div key={pathname} className="curtain" aria-hidden="true" />}
       <main ref={main}>
-        <Hero /><Trust /><Audience /><Properties /><Process /><Calculator /><Neighbourhoods /><Team /><Reviews /><Resources /><Faq /><Contact />
+        <div key={pathname} className={`page ${moved.current ? 'moved' : ''}`}>
+        <Routes>
+          <Route path={ROUTES.home} element={<HomePage />} />
+          <Route path={ROUTES.properties} element={<PropertiesPage />} />
+          <Route path={ROUTES.help} element={<HowWeHelpPage />} />
+          <Route path={ROUTES.process} element={<HowItWorksPage />} />
+          <Route path={ROUTES.calculator} element={<CalculatorPage />} />
+          <Route path={ROUTES.team} element={<OurPeoplePage />} />
+          <Route path={ROUTES.resources} element={<ResourcesPage />} />
+          <Route path={ROUTES.contact} element={<ContactPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+        </div>
       </main>
       <Footer />
       <Sphere />
