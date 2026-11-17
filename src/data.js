@@ -1,5 +1,5 @@
 // All sample content is placeholder. Each item is flagged on screen (FR-34).
-export const BRAND = 'Hearthly'
+export const BRAND = 'FutureNova'
 export const CITY = 'Agra'
 export const PHONE = '+910000000000'      // placeholder
 export const WHATSAPP = 'https://wa.me/910000000000' // placeholder

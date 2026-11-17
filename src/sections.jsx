@@ -26,7 +26,7 @@ export function Header() {
   return (
     <header className={`hdr ${small ? 'small' : ''}`}>
       <div className="wrap">
-        <Link to="/" aria-label="Hearthly home"><Logo /></Link>
+        <Link to="/" aria-label="FutureNova home"><Logo /></Link>
         <nav className="nav" aria-label="Main">
           {LINKS.map(([id, en, hi]) => <NavLink key={id} to={ROUTES[id]} className={({ isActive }) => (isActive ? 'on' : '')}>{t(en, hi)}</NavLink>)}
         </nav>
@@ -519,7 +519,7 @@ export function Footer() {
         </div>
         <div className="risk"><b>{t('Your home may be repossessed if you do not keep up repayments on your loan.', 'यदि आप लोन की किस्तें नहीं चुकाते हैं तो आपका घर ज़ब्त किया जा सकता है।')}</b>
           <p>Placeholder compliance text: your first appointment is free. Any adviser fee will be explained before you proceed. Loan availability is subject to status and lender criteria. Final regulatory wording must be confirmed by the client’s compliance lead.</p></div>
-        <div className="fbot"><span>© 2026 Hearthly. All rights reserved.</span>
+        <div className="fbot"><span>© 2026 FutureNova. All rights reserved.</span>
           <span style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap' }}>
             <span className="lang"><button className={lang === 'en' ? 'on' : ''} onClick={() => setLang('en')}>EN</button><button className={lang === 'hi' ? 'on' : ''} onClick={() => setLang('hi')}>हिन्दी</button></span>
             <span className="lang">{['light', 'dark', 'system'].map((m) => <button key={m} className={themePref === m ? 'on' : ''} aria-pressed={themePref === m} onClick={() => setTheme(m)}>{m}</button>)}</span>

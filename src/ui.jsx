@@ -127,6 +127,6 @@ export const Logo = ({ light }) => (
     <svg width="34" height="34" viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="3" strokeLinejoin="round" aria-hidden="true">
       <path d="M6 18 20 6l14 12v16H6z" /><path d="M20 20v8" strokeLinecap="round" />
     </svg>
-    <span><b>hearthly</b><small>HOMES · AGRA</small></span>
+    <span><b>FutureNova</b><small>HOMES · AGRA</small></span>
   </span>
 )
