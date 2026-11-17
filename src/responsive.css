@@ -1,0 +1,87 @@
+/* ===== Responsive layer. Loaded after styles.css, so it only adds/overrides ===== */
+html{-webkit-text-size-adjust:100%}
+img{max-width:100%}
+.grid3{grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr))}
+.stories{grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr))}
+.hdr{height:calc(var(--hh) + env(safe-area-inset-top,0px));padding-top:env(safe-area-inset-top,0px)}
+footer{padding-bottom:calc(40px + env(safe-area-inset-bottom,0px))}
+.lines>div{gap:16px}.lines b{white-space:nowrap}
+
+/* ---- Mobile 3-dot drawer (hidden on tablet and desktop) ---- */
+.dots-btn{display:none}
+.drawer{position:fixed;inset:0;z-index:80;visibility:hidden;transition:visibility 0s .35s}
+.drawer.open{visibility:visible;transition-delay:0s}
+.drawer-back{position:absolute;inset:0;background:rgba(10,20,20,.55);opacity:0;transition:opacity .3s}
+.drawer.open .drawer-back{opacity:1}
+.drawer-panel{position:absolute;top:0;right:0;bottom:0;width:min(88vw,380px);background:var(--surface);padding:max(20px,env(safe-area-inset-top,0px)) 24px max(24px,env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:22px;overflow-y:auto;transform:translateX(100%);transition:transform .35s cubic-bezier(.2,.8,.2,1);box-shadow:-20px 0 60px rgba(0,0,0,.25)}
+.drawer.open .drawer-panel{transform:none}
+.drawer-head{display:flex;justify-content:space-between;align-items:center}
+.drawer-links{display:grid}
+.drawer-links a{display:flex;align-items:center;gap:14px;min-height:60px;border-bottom:1px solid var(--border);font-size:1.25rem;font-weight:700;letter-spacing:-.02em}
+.drawer-links a small{color:var(--brand-text);font-size:.75rem;font-weight:800;width:24px}
+.drawer-links a span{flex:1}
+.drawer-links a .ic{color:var(--brand-text);opacity:0;transform:translateX(-6px);transition:.2s}
+.drawer-links a.on{color:var(--brand-text)}.drawer-links a.on .ic{opacity:1;transform:none}
+.drawer.open .drawer-links a{animation:drawerin .45s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * 55ms + 120ms)}
+@keyframes drawerin{from{opacity:0;transform:translateX(24px)}}
+.drawer-foot{margin-top:auto;display:grid;gap:12px;justify-items:start}
+.drawer-foot .lang button{min-height:36px}
+html.drawer-open .sphere{display:none}
+
+/* ---- Tablet (768px to 1279px): 2-column dropdown menu ---- */
+@media(min-width:768px){
+  .drawer{display:none}
+  .mnav{grid-template-columns:1fr 1fr;column-gap:40px}
+}
+@media(min-width:768px) and (max-width:1279px){
+  .hero h1{font-size:clamp(3.4rem,9vw,5rem)}
+  .card{padding:30px}
+}
+
+/* ---- Mobile (up to 767px) ---- */
+@media(max-width:767px){
+  :root{--hh:72px}
+  .hdr.small{--hh:64px}
+  .hdr .wrap{gap:10px}
+  .menu-btn,.mnav{display:none!important}
+  .dots-btn{display:grid}
+  .hide-m{display:none!important}
+  .tools>.btn.teal{display:none}
+  .tools{gap:6px}
+  .pop{position:fixed;top:calc(var(--hh) + env(safe-area-inset-top,0px) + 8px);left:12px;right:12px;width:auto}
+  input,select,textarea{font-size:16px}
+  .hero{min-height:calc(100svh - 72px)}
+  .hero:before{background:linear-gradient(180deg,rgba(10,20,20,.78),rgba(10,20,20,.58))}
+  .hero .wrap{padding-top:40px;padding-bottom:130px}
+  .hero h1{font-size:clamp(2.1rem,10vw,3.4rem)}
+  .hero-note{right:84px;font-size:.78rem;align-items:flex-start}
+  .scroll-dn{width:44px;height:44px}
+  .trust .wrap{flex-direction:column;gap:16px}
+  .card{padding:26px}.card .top{margin-bottom:24px}
+  .fbar{padding:18px}
+  .cin,.cout{padding:22px}
+  .cout .big{font-size:clamp(2.4rem,11vw,3.4rem)}
+  .tabs{display:flex;width:100%}.tabs button{flex:1;padding:0 8px}
+  .steps{gap:28px;margin:44px 0 36px}
+  .proc-foot .btn{width:100%}
+  .proc-foot p{font-size:1.2rem}
+  .form{padding:22px}
+  .orb{width:54px;height:54px}
+}
+@media(max-width:480px){
+  .cta-row{gap:14px}
+  .cta-row .btn.yellow{width:100%}
+  .sec-head{margin-bottom:32px;gap:18px}
+  .q{gap:14px}
+  .fbot{flex-direction:column;align-items:flex-start}
+}
+@media(max-width:700px){
+  .nbs,.team{margin-left:calc(-1 * clamp(20px,5vw,64px));margin-right:calc(-1 * clamp(20px,5vw,64px));padding-left:clamp(20px,5vw,64px);padding-right:clamp(20px,5vw,64px);scroll-padding:0 clamp(20px,5vw,64px)}
+}
+/* Touch screens have no hover, so always show the audience-card arrow */
+@media(hover:none){.card .go{opacity:1;transform:none}}
+
+/* Keep the header icons at the right edge when the inline nav is hidden */
+@media(max-width:1279px){
+  .nav+.tools{margin-left:auto}
+}
